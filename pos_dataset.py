@@ -48,7 +48,7 @@ class PosDataset(data.Dataset):
             y.extend(yy)
 
         assert len(x) == len(y) == len(is_heads)
-        print(f"length of x={len(x)}, length of y={len(y)}, heads{len(is_heads)}")
+        print(f"length of x={len(x)}, length of y={len(y)}, heads={len(is_heads)}")
 
         sequence_length = len(y)
         return words, x, is_heads, tags, y, sequence_length

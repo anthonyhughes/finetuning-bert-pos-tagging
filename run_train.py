@@ -1,7 +1,7 @@
 import torch
+import torch.optim as optim
 from torch import nn
 from torch.utils import data
-import torch.optim as optim
 from transformers import BertTokenizer
 
 from model import SequenceClassificationModel
@@ -11,7 +11,7 @@ from utils.evaluate import evaluate
 from utils.model_utils import pad
 from utils.train import train
 
-PATH = './post_data/trained-model.torch'
+PATH = './pos_data/trained-model.torch'
 
 
 def run_train() -> None:

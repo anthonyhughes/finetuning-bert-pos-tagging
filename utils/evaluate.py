@@ -1,7 +1,7 @@
 from typing import List
 
-import torch
 import numpy as np
+import torch
 
 
 def remove_pads(padded_list: List) -> List:
@@ -44,4 +44,4 @@ def evaluate(model, iterator, idx2tag, tag2idx) -> None:
 
     acc = (y_true == y_pred).astype(np.int32).sum() / len(y_true)
 
-    print(f"Total accuracy = ${acc}")
+    print(f"Total accuracy=${acc}")
