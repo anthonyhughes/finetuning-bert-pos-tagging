@@ -1,7 +1,9 @@
 from typing import Tuple, Dict, List
-from sklearn.model_selection import train_test_split
 
 import nltk
+from sklearn.model_selection import train_test_split
+
+nltk.download('treebank')
 
 
 def create_pos_annotations() -> List:

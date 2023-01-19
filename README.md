@@ -5,5 +5,5 @@
 ```shell
 virtualenv env
 pip install -r requirements.txt
-python run_train
+python run_train.py
 ```
