@@ -1,8 +1,15 @@
+from typing import List
+
 import torch
 import numpy as np
 
 
+def remove_pads(padded_list: List) -> List:
+    return padded_list[1:-1]
+
+
 def evaluate(model, iterator, idx2tag, tag2idx) -> None:
+    print('Starting eval')
     model.eval()
 
     Words, Is_heads, Tags, Y, Y_hat = [], [], [], [], []
@@ -24,7 +31,10 @@ def evaluate(model, iterator, idx2tag, tag2idx) -> None:
             y_hat = [hat for head, hat in zip(is_heads, y_hat) if head == 1]
             preds = [idx2tag[hat] for hat in y_hat]
             assert len(preds) == len(words.split()) == len(tags.split())
-            for w, t, p in zip(words.split()[1:-1], tags.split()[1:-1], preds[1:-1]):
+            for w, t, p in zip(
+                    remove_pads(words.split()),
+                    remove_pads(tags.split()),
+                    remove_pads(preds)):
                 file_out.write("{} {} {}\n".format(w, t, p))
             file_out.write("\n")
 
@@ -34,4 +44,4 @@ def evaluate(model, iterator, idx2tag, tag2idx) -> None:
 
     acc = (y_true == y_pred).astype(np.int32).sum() / len(y_true)
 
-    print("acc=%.2f" % acc)
+    print(f"Total accuracy = ${acc}")

@@ -11,8 +11,14 @@ from utils.evaluate import evaluate
 from utils.model_utils import pad
 from utils.train import train
 
+PATH = './post_data/trained-model.torch'
 
-def run_train():
+
+def run_train() -> None:
+    """
+    Main function for running the training of the BERT model
+    :return:
+    """
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
     tags = create_pos_annotations()
@@ -43,6 +49,8 @@ def run_train():
     criterion = nn.CrossEntropyLoss(ignore_index=0)
 
     train(model, train_iter, optimizer, criterion)
+
+    torch.save(model.state_dict(), PATH)
 
     evaluate(model, test_iter, idx2tag, tag_to_idx)
 
