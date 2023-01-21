@@ -2,7 +2,6 @@ def train(model, iterator, optimizer, criterion):
     model.train()
     for i, batch in enumerate(iterator):
         words, x, is_heads, tags, y, seqlens = batch
-        _y = y  # for monitoring
         optimizer.zero_grad()
         logits, y, _ = model(x, y)  # logits: (N, T, VOCAB), y: (N, T)
 

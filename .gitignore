@@ -128,3 +128,5 @@ dmypy.json
 # Pyre type checker
 .pyre/
 .idea/
+pos_data/trained-model.torch
+pos_data/results.csv
