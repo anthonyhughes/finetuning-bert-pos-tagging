@@ -19,6 +19,7 @@ class SequenceClassificationModel(nn.Module):
         x = x.to(self.device)
         y = y.to(self.device)
 
+        # training taken from super (default is true)
         if self.training:
             self.bert.train()
             out = self.bert(x)
@@ -26,7 +27,8 @@ class SequenceClassificationModel(nn.Module):
         else:
             self.bert.eval()
             with torch.no_grad():
-                encoded_layers, _ = self.bert(x)
+                out = self.bert(x)
+                encoded_layers = out['last_hidden_state']
 
         logits = self.fc(encoded_layers)
         y_hat = logits.argmax(-1)

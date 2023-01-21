@@ -14,6 +14,7 @@ def evaluate(model, iterator, idx2tag, tag2idx) -> None:
 
     Words, Is_heads, Tags, Y, Y_hat = [], [], [], [], []
     with torch.no_grad():
+        print('Generating all predictions from the test set')
         for i, batch in enumerate(iterator):
             words, x, is_heads, tags, y, seqlens = batch
 
@@ -30,10 +31,10 @@ def evaluate(model, iterator, idx2tag, tag2idx) -> None:
         for words, is_heads, tags, y_hat in zip(Words, Is_heads, Tags, Y_hat):
             y_hat = [hat for head, hat in zip(is_heads, y_hat) if head == 1]
             preds = [idx2tag[hat] for hat in y_hat]
-            assert len(preds) == len(words.split()) == len(tags.split())
+            assert len(preds) == len(words) == len(tags)
             for w, t, p in zip(
-                    remove_pads(words.split()),
-                    remove_pads(tags.split()),
+                    remove_pads(words),
+                    remove_pads(tags),
                     remove_pads(preds)):
                 file_out.write("{} {} {}\n".format(w, t, p))
             file_out.write("\n")

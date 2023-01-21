@@ -16,5 +16,5 @@ def train(model, iterator, optimizer, criterion):
 
         if i % 10 == 0:  # monitoring
             print(f"step={i}, loss={loss.item}")
-            if i == 100:
+            if i == 10:
                 break
