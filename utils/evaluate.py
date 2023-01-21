@@ -27,7 +27,7 @@ def evaluate(model, iterator, idx2tag, tag2idx) -> None:
             Y_hat.extend(y_hat.cpu().numpy().tolist())
 
     # gets results and save
-    with open("result", 'w') as file_out:
+    with open("./pos_data/result.csv", 'w') as file_out:
         for words, is_heads, tags, y_hat in zip(Words, Is_heads, Tags, Y_hat):
             y_hat = [hat for head, hat in zip(is_heads, y_hat) if head == 1]
             preds = [idx2tag[hat] for hat in y_hat]
@@ -36,7 +36,7 @@ def evaluate(model, iterator, idx2tag, tag2idx) -> None:
                     remove_pads(words),
                     remove_pads(tags),
                     remove_pads(preds)):
-                file_out.write("{} {} {}\n".format(w, t, p))
+                file_out.write("{},{},{}\n".format(w, t, p))
             file_out.write("\n")
 
     # calc metric
