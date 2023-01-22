@@ -1,16 +1,24 @@
-from typing import List
+from typing import List, Dict, Tuple
 
-import numpy as np
+import pandas as pd
 import torch
+from sklearn.metrics import classification_report
 
 RESULTS_PATH = "./pos_data/result.csv"
+
+
+def read_results_csv() -> Tuple:
+    frame = pd.read_csv(RESULTS_PATH, header=None)
+    ytrue = frame[frame.columns[1]]
+    ypred = frame[frame.columns[2]]
+    return list(ytrue), list(ypred)
 
 
 def remove_pads(padded_list: List) -> List:
     return padded_list[1:-1]
 
 
-def evaluate(model, iterator, idx2tag, tag2idx) -> None:
+def evaluate(model, iterator, idx2tag, tag2idx: Dict) -> None:
     print('Starting eval')
     model.eval()
 
@@ -38,14 +46,9 @@ def evaluate(model, iterator, idx2tag, tag2idx) -> None:
                     remove_pads(words),
                     remove_pads(tags),
                     remove_pads(preds)):
-                file_out.write("{},{},{}\n".format(w, t, p))
+                file_out.write("\"{}\",\"{}\",\"{}\"\n".format(w, t, p))
             file_out.write("\n")
 
-    y_true = np.array(
-        [tag2idx[line.split()[1]] for line in open(RESULTS_PATH, 'r').read().splitlines() if len(line) > 0])
-    y_pred = np.array(
-        [tag2idx[line.split()[2]] for line in open(RESULTS_PATH, 'r').read().splitlines() if len(line) > 0])
-
-    acc = (y_true == y_pred).astype(np.int32).sum() / len(y_true)
-
-    print(f"Total accuracy=${acc}")
+    y_true, y_pred = read_results_csv()
+    report = classification_report(y_true, y_pred)
+    print(report)
