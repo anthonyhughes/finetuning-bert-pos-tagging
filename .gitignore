@@ -129,4 +129,4 @@ dmypy.json
 .pyre/
 .idea/
 pos_data/trained-model.torch
-pos_data/results.csv
+pos_data/result.csv

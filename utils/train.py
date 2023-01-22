@@ -1,4 +1,13 @@
-def train(model, iterator, optimizer, criterion):
+def train(model, iterator, optimizer, criterion, training_steps: int) -> None:
+    """
+
+    :param model: nn to be trained
+    :param iterator: dataset to be used as training
+    :param optimizer:
+    :param criterion:
+    :param training_steps: stop at set step count
+    :return:
+    """
     model.train()
     for i, batch in enumerate(iterator):
         words, x, is_heads, tags, y, seqlens = batch
@@ -13,7 +22,8 @@ def train(model, iterator, optimizer, criterion):
 
         optimizer.step()
 
-        if i % 10 == 0:  # monitoring
+        if i % 10 == 0:
             print(f"step={i}, loss={loss.item}")
-            # if i == 10:
-            #     break
+
+        if i == training_steps:
+            break

@@ -51,7 +51,7 @@ def run_train(training_steps: int, trained_model_path: str,
 
         optimizer = optim.Adam(model.parameters(), lr=0.0001)
         criterion = nn.CrossEntropyLoss(ignore_index=0)
-        train(model, train_iter, optimizer, criterion)
+        train(model, train_iter, optimizer, criterion, training_steps)
         torch.save(model.state_dict(), PATH)
         evaluate(model, test_iter, idx2tag, tag_to_idx)
     elif classification_report_only is True:
@@ -60,7 +60,7 @@ def run_train(training_steps: int, trained_model_path: str,
         print(report)
     else:
         model = SequenceClassificationModel(vocab_size=len(tag_to_idx), device=device)
-        model.load_state_dict(torch.load(PATH), strict=False)
+        model.load_state_dict(torch.load(trained_model_path), strict=False)
         evaluate(model, test_iter, idx2tag, tag_to_idx)
 
 
