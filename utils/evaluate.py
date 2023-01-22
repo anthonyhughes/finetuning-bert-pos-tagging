@@ -3,6 +3,8 @@ from typing import List
 import numpy as np
 import torch
 
+RESULTS_PATH = "./pos_data/result.csv"
+
 
 def remove_pads(padded_list: List) -> List:
     return padded_list[1:-1]
@@ -27,7 +29,7 @@ def evaluate(model, iterator, idx2tag, tag2idx) -> None:
             Y_hat.extend(y_hat.cpu().numpy().tolist())
 
     # gets results and save
-    with open("./pos_data/result.csv", 'w') as file_out:
+    with open(RESULTS_PATH, 'w') as file_out:
         for words, is_heads, tags, y_hat in zip(Words, Is_heads, Tags, Y_hat):
             y_hat = [hat for head, hat in zip(is_heads, y_hat) if head == 1]
             preds = [idx2tag[hat] for hat in y_hat]
@@ -39,9 +41,10 @@ def evaluate(model, iterator, idx2tag, tag2idx) -> None:
                 file_out.write("{},{},{}\n".format(w, t, p))
             file_out.write("\n")
 
-    # calc metric
-    y_true = np.array([tag2idx[line.split()[1]] for line in open('result', 'r').read().splitlines() if len(line) > 0])
-    y_pred = np.array([tag2idx[line.split()[2]] for line in open('result', 'r').read().splitlines() if len(line) > 0])
+    y_true = np.array(
+        [tag2idx[line.split()[1]] for line in open(RESULTS_PATH, 'r').read().splitlines() if len(line) > 0])
+    y_pred = np.array(
+        [tag2idx[line.split()[2]] for line in open(RESULTS_PATH, 'r').read().splitlines() if len(line) > 0])
 
     acc = (y_true == y_pred).astype(np.int32).sum() / len(y_true)
 
